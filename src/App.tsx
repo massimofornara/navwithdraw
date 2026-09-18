@@ -4,6 +4,8 @@ import OnChainReconciliationPanel from './OnChainReconciliation'
 import DataExtractor from './DataExtractor'
 import GuidePanel from './GuidePanel'
 import PortfolioManager from './PortfolioManager'
+import IPGuard from './IPGuard'
+import AdminPanel from './AdminPanel'
 
 type Account = {
   id: string
@@ -56,7 +58,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'guide' | 'tests'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'admin' | 'guide' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -296,6 +298,7 @@ function App() {
             { id: 'onchain' as const, label: '🔗 On-Chain' },
             { id: 'extractor' as const, label: '🌐 Estrattore' },
             { id: 'portfolio' as const, label: '💼 Portafoglio' },
+            { id: 'admin' as const, label: '🔐 Admin' },
             { id: 'guide' as const, label: '📖 Guida' },
             { id: 'tests' as const, label: '🧪 Test' }
           ].map(tab => (
@@ -704,9 +707,82 @@ function App() {
           <DataExtractor />
         )}
 
-        {/* Portfolio Manager */}
+        {/* Portfolio Manager - Protetto da IP */}
         {activeTab === 'portfolio' && (
-          <PortfolioManager />
+          <IPGuard
+            authorizedIPs={['93.44.201.21']}
+            fallback={
+              <div className="min-h-[60vh] flex items-center justify-center">
+                <div className="bg-slate-800/50 border border-red-500/30 rounded-2xl p-8 max-w-2xl backdrop-blur-sm">
+                  <div className="text-center mb-6">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <h2 className="text-3xl font-bold text-red-400 mb-2">Accesso Negato</h2>
+                    <p className="text-slate-300 text-lg">
+                      Solo gli utenti autorizzati possono gestire il portafoglio
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+                    <h3 className="font-semibold text-slate-300 mb-3">📋 Dettagli Sicurezza</h3>
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg">
+                        <span className="text-slate-400">Il tuo IP:</span>
+                        <span className="font-mono text-red-400">Verifica in corso...</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg">
+                        <span className="text-slate-400">IP autorizzati:</span>
+                        <div className="text-right">
+                          <div className="font-mono text-emerald-400">93.44.201.21</div>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <span className="text-slate-400">Stato:</span>
+                        <span className="font-semibold text-red-400">❌ Non autorizzato</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+                    <h4 className="font-semibold text-blue-300 mb-2">ℹ️ Come ottenere l'accesso</h4>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      Questa funzionalità è riservata agli amministratori del sistema. 
+                      Per generare e scrivere manualmente i NAV della piattaforma, 
+                      è necessario che il tuo indirizzo IP sia nella whitelist.
+                    </p>
+                    <div className="mt-3 p-3 bg-slate-900/50 rounded-lg">
+                      <p className="text-xs text-slate-400 mb-1">Contatta l'amministratore per:</p>
+                      <ul className="text-xs text-slate-400 list-disc list-inside mt-1">
+                        <li>Aggiungere il tuo IP alla whitelist</li>
+                        <li>Ottenere le credenziali di accesso</li>
+                        <li>Verificare la tua identità</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 text-center">
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-6 py-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 transition-colors"
+                    >
+                      🔄 Riprova
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            <PortfolioManager />
+          </IPGuard>
+        )}
+
+        {/* Admin Panel - Protetto da IP */}
+        {activeTab === 'admin' && (
+          <IPGuard authorizedIPs={['93.44.201.21']}>
+            <AdminPanel />
+          </IPGuard>
         )}
 
         {/* Guide Panel */}

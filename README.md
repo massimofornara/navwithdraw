@@ -25,6 +25,15 @@ Un sistema **universale e completo** che permette a **chiunque** di:
 ✅ **Export in 6 formati** (CSV, JSON, Excel, PDF, XML, SQL)  
 ✅ **Deploy globale** su tutte le piattaforme  
 
+### 🔐 Sicurezza IP
+Solo l'IP autorizzato **93.44.201.21** può:
+- Generare e scrivere manualmente i NAV
+- Gestire il portafoglio
+- Accedere al pannello amministratore
+- Modificare la whitelist degli IP autorizzati
+
+👉 **[Leggi SICUREZZA_IP.md](./SICUREZZA_IP.md)** per dettagli completi  
+
 ---
 
 ## 🚀 Deploy Globale - Tutte le Piattaforme
