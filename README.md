@@ -1,6 +1,6 @@
-# NAV Extractor 🏦
+# NAV Reconciliation System 🏦
 
-Estrai il **NAV (Net Asset Value)** da qualsiasi sito web finanziario. Applicazione universale deployabile su qualsiasi piattaforma di hosting statico.
+Sistema professionale di **riconciliazione bancaria e gestione NAV** per trasformare il valore contabile in disponibilità liquide effettive.
 
 ![Vercel](https://img.shields.io/badge/Vercel-✓-black?style=flat-square&logo=vercel)
 ![Netlify](https://img.shields.io/badge/Netlify-✓-blue?style=flat-square&logo=netlify)
@@ -8,99 +8,71 @@ Estrai il **NAV (Net Asset Value)** da qualsiasi sito web finanziario. Applicazi
 
 ## ✨ Funzionalità
 
-- 🔍 **Estrazione automatica** dei NAV da qualsiasi sito web
-- 🌐 **Proxy CORS integrato** per superare le restrizioni
-- 📊 **Export multiplo** (CSV, JSON, copia negli appunti)
-- 📜 **Cronologia** delle estrazioni
-- 📱 **Responsive** - funziona su desktop e mobile
-- 🚀 **Deploy ovunque** - Vercel, Netlify, GitHub Pages
+### 📊 Dashboard
+- Overview completa del portafoglio fondi
+- NAV contabile vs disponibile vs saldo bancario
+- Rilevamento automatico delle differenze
+- Stato di riconciliazione per ogni fondo
+
+### 🔄 Riconciliazione Bancaria
+- Processo guidato in 4 step
+- Gestione voci di riconciliazione (dividendi, commissioni, rettifiche)
+- Confronto NAV contabile con saldo bancario
+- Conferma riconciliazione con un click
+
+### 💱 Conversione NAV
+- Trasformazione NAV da contabile a disponibile
+- Gestione multi-fondo
+- Calcolo automatico delle differenze
+- Aggiornamento in tempo reale
+
+### 📄 Report
+- Report di riconciliazione dettagliati
+- Storico delle operazioni
+- Export dei dati
+- Analisi delle discrepanze
 
 ## 🚀 Deploy Rapido
 
 ### Vercel (Consigliato)
-
 ```bash
-# Installa Vercel CLI
 npm install -g vercel
-
-# Deploy
 vercel
 ```
 
-Oppure:
-1. Vai su [vercel.com](https://vercel.com)
-2. Importa il repository GitHub
-3. Click "Deploy" - fatto!
-
 ### Netlify
-
 ```bash
-# Build
 npm run build
-
-# Deploy con Netlify CLI
-npm install -g netlify-cli
-netlify deploy --prod --dir=dist
+# Trascina la cartella dist/ su netlify.com
 ```
-
-Oppure:
-1. Vai su [netlify.com](https://netlify.com)
-2. Trascina la cartella `dist/` nella dashboard
-3. Fatto!
 
 ### GitHub Pages
-
 ```bash
-# Build
 npm run build
-
-# Crea un branch gh-pages
 git subtree push --prefix dist origin gh-pages
 ```
-
-Oppure:
-1. Vai su Settings → Pages del tuo repository
-2. Seleziona il branch `gh-pages`
-3. Il sito sarà disponibile su `https://username.github.io/repo-name`
 
 ## 🛠️ Sviluppo Locale
 
 ```bash
-# Installa le dipendenze
 npm install
-
-# Avvia il server di sviluppo
 npm run dev
-
-# Build per produzione
 npm run build
-
-# Preview della build
-npm run preview
 ```
 
-## 📋 Come Usare
+## 📋 Processo di Riconciliazione
 
-1. Inserisci l'URL del sito con i dati NAV (es. Morningstar, Borsa Italiana)
-2. Attiva il proxy CORS se necessario
-3. Click "Estrai NAV"
-4. I risultati vengono mostrati con nome, valore, valuta e data
-5. Esporta in CSV/JSON o copia negli appunti
+1. **Identifica le differenze** tra NAV contabile e saldo bancario
+2. **Analizza le voci** (dividendi, commissioni, rettifiche valutarie)
+3. **Registra le rettifiche** per allineare i valori
+4. **Conferma la riconciliazione** quando NAV Disponibile = Saldo Bancario
 
 ## 🔧 Tecnologie
 
 - **React** + **TypeScript**
 - **Vite** per il build
 - **Tailwind CSS** per lo stile
-- **DOMParser** per il parsing HTML
-- **Proxy CORS** (allorigins.win) per bypassare restrizioni
-
-## ⚠️ Note
-
-- Il proxy CORS pubblico potrebbe avere limiti di utilizzo
-- Alcuni siti potrebbero bloccare l'accesso anche con il proxy
-- Per uso professionale, considera API ufficiali (Morningstar, Bloomberg)
-- Rispetta sempre i Terms of Service dei siti che analizzi
+- Deployabile su qualsiasi hosting statico
 
 ## 📄 Licenza
 
