@@ -283,6 +283,47 @@ Il sistema include una **test suite completa** integrata nell'applicazione:
 
 ---
 
+## 📖 Guida Pratica
+
+### Come Convertire Fondi Contabili in Disponibili
+
+**Vuoi sapere come usare il sistema con il tuo conto UniCredit e wallet crypto?**
+
+👉 **[Leggi la Guida Pratica Completa](./GUIDA_PRATICA.md)**
+
+La guida include:
+- ✅ **Step-by-step** per UniCredit (riconciliazione tradizionale)
+- ✅ **Step-by-step** per wallet crypto (riconciliazione on-chain)
+- ✅ **Riconciliazione ibrida** (entrambi insieme)
+- ✅ **Esempi pratici** con numeri reali
+- ✅ **FAQ** e troubleshooting
+- ✅ **Sicurezza** e best practices
+
+### Esempio Rapido
+
+**UniCredit:**
+```
+NAV Contabile:    €125,000
+- Commissioni:    €625
+- Tasse:          €1,300
++ Dividendi:      €450
+════════════════
+NAV Disponibile:  €123,525
+```
+
+**Wallet Crypto:**
+```
+Saldo Contabile:  2.500 ETH (€9,100)
+Saldo On-Chain:   2.456 ETH (€8,940)
+- Gas fees:       €22
+════════════════
+NAV Disponibile:  €8,918
+```
+
+**Patrimonio Totale: €132,443**
+
+---
+
 ## 📄 Licenza
 
 MIT - Uso libero per scopi personali e commerciali
