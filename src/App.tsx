@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import TestPanel from './TestPanel'
 
 type Account = {
   id: string
@@ -51,7 +52,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -287,7 +288,8 @@ function App() {
             { id: 'funds' as const, label: '💼 Fondi' },
             { id: 'reconciliation' as const, label: '🔄 Riconciliazione' },
             { id: 'import' as const, label: '📥 Importa' },
-            { id: 'reports' as const, label: '📄 Report' }
+            { id: 'reports' as const, label: '📄 Report' },
+            { id: 'tests' as const, label: '🧪 Test' }
           ].map(tab => (
             <button
               key={tab.id}
@@ -682,6 +684,11 @@ function App() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Tests */}
+        {activeTab === 'tests' && (
+          <TestPanel />
         )}
       </main>
 

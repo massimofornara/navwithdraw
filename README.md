@@ -226,6 +226,44 @@ NAV Disponibile (reale)
 - [ ] Multi-valuta automatico
 - [ ] Integrazione fiscale italiana
 
+## 🧪 Test & Quality Assurance
+
+Il sistema include una **test suite completa** integrata nell'applicazione:
+
+### Come Eseguire i Test
+1. Apri l'applicazione
+2. Vai sulla tab **"🧪 Test"**
+3. Seleziona modalità **Demo** o **Produzione**
+4. Click su **"🔄 Esegui Tutti i Test"**
+
+### Test Inclusi
+- ✅ **Strutture Dati** - Verifica tipi e validità
+- ✅ **Calcoli Finanziari** - NAV, differenze, totali
+- ✅ **Formattazione Valori** - Valuta, date, numeri
+- ✅ **Export Dati** - JSON e CSV
+- ✅ **Validazione Input** - ISIN, importi, date
+- ✅ **Performance** - Dataset grandi (10.000 elementi)
+- ✅ **Riconciliazione** - Logica bancaria
+- ✅ **Multi-Valuta** - Conversioni
+
+### Test Integrazioni
+- 🌐 Connessione a siti finanziari (Morningstar, Borsa Italiana, ecc.)
+- 🌐 Proxy CORS funzionante
+- 🌐 API esterne raggiungibili
+
+### Test Deploy Readiness
+- 🚀 Build ottimizzata
+- 🚀 Compatibilità piattaforme
+- 🚀 Performance verificate
+- 🚀 Sicurezza controllata
+
+### Risultati
+**Vedi [TEST_REPORT.md](./TEST_REPORT.md)** per il report completo.
+
+**Stato attuale:** ✅ **8/8 test passati** - Pronto per produzione!
+
+---
+
 ## 📄 Licenza
 
 MIT - Uso libero per scopi personali e commerciali
