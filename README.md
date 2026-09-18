@@ -48,6 +48,15 @@ Sistema **universale e completo** di riconciliazione bancaria e gestione NAV che
 - **Audit trail**: Storico completo verifiche e riconciliazioni
 - Vedi [ONCHAIN_DOCS.md](./ONCHAIN_DOCS.md) per la documentazione completa
 
+### 🌐 Estrattore Dati Universale
+- **13+ fonti integrate**: Morningstar, Yahoo Finance, Borsa Italiana, Etherscan, Binance, ecc.
+- **Estrazione intelligente**: Da siti web, API, applicazioni
+- **Riconciliazione ibrida**: Tradizionale + On-Chain + Combinata
+- **6 formati export**: CSV, JSON, Excel, PDF, XML, SQL
+- **Selezione flessibile**: Estrai da tutte o solo fonti selezionate
+- **Conversione automatica**: Da saldo contabile a disponibile
+- Vedi [EXTRACTOR_DOCS.md](./EXTRACTOR_DOCS.md) per la documentazione completa
+
 ### 📥 Importazione Universale
 - **CSV/Excel**: Estratti conto, report broker
 - **JSON/API**: Integrazioni automatiche
