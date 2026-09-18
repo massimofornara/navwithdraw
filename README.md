@@ -190,7 +190,12 @@ Tab "📤 Export"
 
 ## 📖 Guide Complete
 
-- **[GUIDA_PRATICA.md](./GUIDA_PRATICA.md)** - Come usare con UniCredit + Crypto
+### 📘 Guida Principale
+- **[GUIDA_COMPLETA_AGGIORNATA.md](./GUIDA_COMPLETA_AGGIORNATA.md)** - **GUIDA PRINCIPALE** - Tutto quello che devi sapere
+
+### 📗 Guide Specifiche
+- **[GUIDA_PRATICA.md](./GUIDA_PRATICA.md)** - Come usare con UniCredit + Crypto (step-by-step)
+- **[SICUREZZA_IP.md](./SICUREZZA_IP.md)** - Sistema sicurezza IP e whitelist
 - **[DEPLOY_GLOBALE.md](./DEPLOY_GLOBALE.md)** - Deploy su tutte le piattaforme
 - **[EXTRACTOR_DOCS.md](./EXTRACTOR_DOCS.md)** - Estrattore dati universale
 - **[ONCHAIN_DOCS.md](./ONCHAIN_DOCS.md)** - Riconciliazione on-chain
