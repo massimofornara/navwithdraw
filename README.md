@@ -1,44 +1,66 @@
-# NAV Reconciliation System 🏦
+# Universal Reconciliation System 🏦
 
-Sistema professionale di **riconciliazione bancaria e gestione NAV** per trasformare il valore contabile in disponibilità liquide effettive.
+Sistema **universale e completo** di riconciliazione bancaria e gestione NAV che funziona con **qualsiasi sito, applicazione e piattaforma**.
 
 ![Vercel](https://img.shields.io/badge/Vercel-✓-black?style=flat-square&logo=vercel)
 ![Netlify](https://img.shields.io/badge/Netlify-✓-blue?style=flat-square&logo=netlify)
 ![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-✓-gray?style=flat-square&logo=github)
 
-## ✨ Funzionalità
+## ✨ Caratteristiche Principali
 
-### 📊 Dashboard
-- Overview completa del portafoglio fondi
+### 🌐 Universale
+- Funziona con **qualsiasi sito web** finanziario
+- Supporta **qualsiasi applicazione** di trading
+- Compatibile con **qualsiasi piattaforma** (banche, broker, wallet crypto)
+- **Zero dipendenze** da servizi specifici
+
+### 📊 Dashboard Completa
+- Overview di tutti i conti e fondi
 - NAV contabile vs disponibile vs saldo bancario
-- Rilevamento automatico delle differenze
-- Stato di riconciliazione per ogni fondo
+- Rilevamento automatico discrepanze
+- Attività recente in tempo reale
+
+### 🏦 Gestione Conti Multipli
+- Conti bancari (Intesa, UniCredit, ecc.)
+- Broker (Directa, Fineco, Degiro, Interactive Brokers)
+- Wallet crypto (Ledger, Binance, Coinbase)
+- Qualsiasi altro tipo di conto
+
+### 💼 Gestione Fondi e Asset
+- ETF, fondi comuni, azioni
+- Criptovalute e token
+- Obbligazioni e titoli di stato
+- Qualsiasi strumento finanziario
 
 ### 🔄 Riconciliazione Bancaria
-- Processo guidato in 4 step
-- Gestione voci di riconciliazione (dividendi, commissioni, rettifiche)
-- Confronto NAV contabile con saldo bancario
-- Conferma riconciliazione con un click
+- Batch di riconciliazione automatici
+- Matching transazioni con estratti conto
+- Gestione discrepanze e rettifiche
+- Report dettagliati per ogni batch
 
-### 💱 Conversione NAV
-- Trasformazione NAV da contabile a disponibile
-- Gestione multi-fondo
-- Calcolo automatico delle differenze
-- Aggiornamento in tempo reale
+### 📥 Importazione Universale
+- **CSV/Excel**: Estratti conto, report broker
+- **JSON/API**: Integrazioni automatiche
+- **Web Scraping**: Estrai da qualsiasi sito
+- **Manuale**: Inserimento diretto
 
-### 📄 Report
-- Report di riconciliazione dettagliati
-- Storico delle operazioni
-- Export dei dati
-- Analisi delle discrepanze
+### 📤 Export Multiplo
+- CSV (compatibile Excel, Google Sheets)
+- JSON (per automazioni e integrazioni)
+- Report completi con analisi
 
-## 🚀 Deploy Rapido
+## 🚀 Deploy Immediato
 
 ### Vercel (Consigliato)
 ```bash
 npm install -g vercel
 vercel
 ```
+
+Oppure:
+1. Vai su [vercel.com](https://vercel.com)
+2. Importa il repository
+3. Click "Deploy"
 
 ### Netlify
 ```bash
@@ -55,25 +77,167 @@ git subtree push --prefix dist origin gh-pages
 ## 🛠️ Sviluppo Locale
 
 ```bash
+# Installa dipendenze
 npm install
+
+# Avvia server di sviluppo
 npm run dev
+
+# Build per produzione
 npm run build
+
+# Preview build
+npm run preview
 ```
 
-## 📋 Processo di Riconciliazione
+## 📋 Casi d'Uso
 
-1. **Identifica le differenze** tra NAV contabile e saldo bancario
-2. **Analizza le voci** (dividendi, commissioni, rettifiche valutarie)
-3. **Registra le rettifiche** per allineare i valori
-4. **Conferma la riconciliazione** quando NAV Disponibile = Saldo Bancario
+### 1. Gestione Portafoglio Personale
+- Monitora tutti i tuoi investimenti in un unico posto
+- Riconcilia automaticamente con estratti conto
+- Tieni traccia di dividendi e commissioni
+
+### 2. Consulente Finanziario
+- Gestisci portafogli di più clienti
+- Genera report professionali
+- Importa dati da qualsiasi broker
+
+### 3. Trading Multi-Piattaforma
+- Coordina investimenti su più broker
+- Riconcilia transazioni cross-platform
+- Monitora performance complessiva
+
+### 4. Crypto + TradFi
+- Unisci wallet crypto e conti tradizionali
+- Converti valori in valuta fiat
+- Traccia tutto il patrimonio
 
 ## 🔧 Tecnologie
 
-- **React** + **TypeScript**
-- **Vite** per il build
-- **Tailwind CSS** per lo stile
-- Deployabile su qualsiasi hosting statico
+- **React 18** + **TypeScript**
+- **Vite** per build ultra-veloce
+- **Tailwind CSS** per UI moderna
+- **Zero backend** - tutto client-side
+- **Deployabile ovunque** - hosting statico
+
+## 🔒 Sicurezza e Privacy
+
+- **100% client-side**: I dati restano nel tuo browser
+- **Nessun server**: Nessuna trasmissione dati
+- **Open source**: Codice verificabile
+- **Locale-first**: Funziona offline
+
+## 📊 Fonti Supportate
+
+### Banche Italiane
+- Intesa Sanpaolo
+- UniCredit
+- BPM
+- BPER
+- Monte dei Paschi
+- Qualsiasi altra banca
+
+### Broker Italiani
+- Directa SIM
+- Fineco
+- Webank
+- Degiro
+- Interactive Brokers
+- Saxo Bank
+
+### Piattaforme Crypto
+- Binance
+- Coinbase
+- Kraken
+- KuCoin
+- Ledger
+- MetaMask
+- Qualsiasi wallet
+
+### Siti Finanziari
+- Morningstar
+- Borsa Italiana
+- Yahoo Finance
+- JustETF
+- Bloomberg
+- Qualsiasi altro sito
+
+## 🎯 Funzionalità Chiave
+
+### Conversione NAV Contabile → Disponibile
+```
+NAV Contabile (teorico)
+    ↓
+- Commissioni
+- Tasse
+- Rettifiche valutarie
+- Dividendi in sospeso
+    ↓
+NAV Disponibile (reale)
+    ↓
+= Saldo Bancario (confermato)
+```
+
+### Riconciliazione Automatica
+1. Importa estratti conto (CSV, PDF, API)
+2. Importa transazioni da broker/wallet
+3. Sistema matcha automaticamente
+4. Evidenzia discrepanze
+5. Genera report di riconciliazione
+
+### Export Professionale
+- Report per commercialisti
+- Dichiarazioni fiscali
+- Audit trail completo
+- Storico transazioni
+
+## 📖 Guida Rapida
+
+### Primo Utilizzo
+1. **Aggiungi conti**: Banca, broker, wallet
+2. **Importa dati**: CSV, JSON, o web scraping
+3. **Riconcilia**: Confronta con estratti conto
+4. **Monitora**: Dashboard con overview completa
+5. **Export**: Genera report quando necessario
+
+### Importazione da Sito Web
+1. Vai su tab "Importa"
+2. Seleziona "Web Scraping"
+3. Inserisci URL del sito (es. Morningstar)
+4. Sistema estrae automaticamente i dati
+5. Dati salvati nel tuo portafoglio
+
+### Riconciliazione Batch
+1. Vai su tab "Riconciliazione"
+2. Seleziona conto da riconciliare
+3. Carica estratti conto
+4. Sistema matcha transazioni
+5. Risolvi discrepanze manualmente
+6. Conferma riconciliazione
+
+## 🔄 Aggiornamenti Futuri
+
+- [ ] Integrazione API dirette con broker
+- [ ] Supporto PDF per estratti conto
+- [ ] Sincronizzazione cloud opzionale
+- [ ] App mobile (PWA)
+- [ ] Alert e notifiche
+- [ ] Analisi avanzata performance
+- [ ] Multi-valuta automatico
+- [ ] Integrazione fiscale italiana
 
 ## 📄 Licenza
 
-MIT
+MIT - Uso libero per scopi personali e commerciali
+
+## 🤝 Contribuire
+
+Contributi, suggerimenti e segnalazioni bug sono benvenuti!
+
+## ⚠️ Disclaimer
+
+Questo strumento è per **uso informativo e di gestione personale**. Non costituisce consulenza finanziaria. Verifica sempre i dati con le tue fonti ufficiali.
+
+---
+
+**Creato per funzionare con qualsiasi cosa** 🚀
