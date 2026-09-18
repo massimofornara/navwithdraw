@@ -3,6 +3,7 @@ import TestPanel from './TestPanel'
 import OnChainReconciliationPanel from './OnChainReconciliation'
 import DataExtractor from './DataExtractor'
 import GuidePanel from './GuidePanel'
+import PortfolioManager from './PortfolioManager'
 
 type Account = {
   id: string
@@ -55,7 +56,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'guide' | 'tests'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'guide' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -294,6 +295,7 @@ function App() {
             { id: 'reports' as const, label: '📄 Report' },
             { id: 'onchain' as const, label: '🔗 On-Chain' },
             { id: 'extractor' as const, label: '🌐 Estrattore' },
+            { id: 'portfolio' as const, label: '💼 Portafoglio' },
             { id: 'guide' as const, label: '📖 Guida' },
             { id: 'tests' as const, label: '🧪 Test' }
           ].map(tab => (
@@ -700,6 +702,11 @@ function App() {
         {/* Data Extractor */}
         {activeTab === 'extractor' && (
           <DataExtractor />
+        )}
+
+        {/* Portfolio Manager */}
+        {activeTab === 'portfolio' && (
+          <PortfolioManager />
         )}
 
         {/* Guide Panel */}
