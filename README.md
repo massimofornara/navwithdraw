@@ -38,6 +38,16 @@ Sistema **universale e completo** di riconciliazione bancaria e gestione NAV che
 - Gestione discrepanze e rettifiche
 - Report dettagliati per ogni batch
 
+### 🔗 Riconciliazione On-Chain (Crypto)
+- **Multi-chain**: Bitcoin, Ethereum, Polygon, Arbitrum, Optimism, Base
+- **Verifica wallet**: Saldo reale direttamente dalla blockchain
+- **Transazioni**: Tracking completo con hash, blocchi, conferme
+- **Gas prices**: Monitoraggio costi in tempo reale
+- **Match automatico**: Transazioni on-chain ↔ registrazioni contabili
+- **Conversione fiat**: Valore crypto in EUR/USD/GBP
+- **Audit trail**: Storico completo verifiche e riconciliazioni
+- Vedi [ONCHAIN_DOCS.md](./ONCHAIN_DOCS.md) per la documentazione completa
+
 ### 📥 Importazione Universale
 - **CSV/Excel**: Estratti conto, report broker
 - **JSON/API**: Integrazioni automatiche

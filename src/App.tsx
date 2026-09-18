@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import TestPanel from './TestPanel'
+import OnChainReconciliationPanel from './OnChainReconciliation'
 
 type Account = {
   id: string
@@ -52,7 +53,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'tests'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -289,6 +290,7 @@ function App() {
             { id: 'reconciliation' as const, label: '🔄 Riconciliazione' },
             { id: 'import' as const, label: '📥 Importa' },
             { id: 'reports' as const, label: '📄 Report' },
+            { id: 'onchain' as const, label: '🔗 On-Chain' },
             { id: 'tests' as const, label: '🧪 Test' }
           ].map(tab => (
             <button
@@ -684,6 +686,11 @@ function App() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* On-Chain Reconciliation */}
+        {activeTab === 'onchain' && (
+          <OnChainReconciliationPanel />
         )}
 
         {/* Tests */}
