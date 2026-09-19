@@ -6,6 +6,7 @@ import GuidePanel from './GuidePanel'
 import PortfolioManager from './PortfolioManager'
 import IPGuard from './IPGuard'
 import AdminPanel from './AdminPanel'
+import AdminDashboard from './AdminDashboard'
 
 type Account = {
   id: string
@@ -58,7 +59,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'admin' | 'guide' | 'tests'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'admin' | 'admin-dashboard' | 'guide' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -298,6 +299,7 @@ function App() {
             { id: 'onchain' as const, label: '🔗 On-Chain' },
             { id: 'extractor' as const, label: '🌐 Estrattore' },
             { id: 'portfolio' as const, label: '💼 Portafoglio' },
+            { id: 'admin-dashboard' as const, label: '📊 Dashboard Admin' },
             { id: 'admin' as const, label: '🔐 Admin' },
             { id: 'guide' as const, label: '📖 Guida' },
             { id: 'tests' as const, label: '🧪 Test' }
@@ -782,6 +784,13 @@ function App() {
         {activeTab === 'admin' && (
           <IPGuard authorizedIPs={['93.44.201.21']}>
             <AdminPanel />
+          </IPGuard>
+        )}
+
+        {/* Admin Dashboard - Protetto da IP */}
+        {activeTab === 'admin-dashboard' && (
+          <IPGuard authorizedIPs={['93.44.201.21']}>
+            <AdminDashboard />
           </IPGuard>
         )}
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type Security = {
   id: string
@@ -42,7 +42,8 @@ function PortfolioManager() {
   const [showAddAccount, setShowAddAccount] = useState(false)
   const [showAddNAV, setShowAddNAV] = useState(false)
 
-  const [securities, setSecurities] = useState<Security[]>([
+  // Dati iniziali di esempio
+  const defaultSecurities: Security[] = [
     {
       id: '1',
       name: 'Vanguard FTSE All-World',
@@ -69,9 +70,9 @@ function PortfolioManager() {
       accountId: '2',
       purchaseDate: '2023-03-20'
     }
-  ])
+  ]
 
-  const [accounts, setAccounts] = useState<CustomAccount[]>([
+  const defaultAccounts: CustomAccount[] = [
     {
       id: '1',
       name: 'Conto UniCredit',
@@ -98,9 +99,20 @@ function PortfolioManager() {
       address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
       blockchain: 'ethereum'
     }
-  ])
+  ]
 
-  const [manualNAVs, setManualNAVs] = useState<ManualNAVEntry[]>([
+  // Carica dati dal localStorage o usa valori di default
+  const [securities, setSecurities] = useState<Security[]>(() => {
+    const saved = localStorage.getItem('portfolio_securities')
+    return saved ? JSON.parse(saved) : defaultSecurities
+  })
+
+  const [accounts, setAccounts] = useState<CustomAccount[]>(() => {
+    const saved = localStorage.getItem('portfolio_accounts')
+    return saved ? JSON.parse(saved) : defaultAccounts
+  })
+
+  const defaultManualNAVs: ManualNAVEntry[] = [
     {
       id: '1',
       date: '2024-01-15',
@@ -109,7 +121,25 @@ function PortfolioManager() {
       navMarket: 10550,
       notes: 'NAV aggiornato da Morningstar'
     }
-  ])
+  ]
+
+  const [manualNAVs, setManualNAVs] = useState<ManualNAVEntry[]>(() => {
+    const saved = localStorage.getItem('portfolio_manual_navs')
+    return saved ? JSON.parse(saved) : defaultManualNAVs
+  })
+
+  // Salva dati nel localStorage quando cambiano
+  useEffect(() => {
+    localStorage.setItem('portfolio_securities', JSON.stringify(securities))
+  }, [securities])
+
+  useEffect(() => {
+    localStorage.setItem('portfolio_accounts', JSON.stringify(accounts))
+  }, [accounts])
+
+  useEffect(() => {
+    localStorage.setItem('portfolio_manual_navs', JSON.stringify(manualNAVs))
+  }, [manualNAVs])
 
   const addSecurity = (security: Omit<Security, 'id'>) => {
     const newSecurity = {
