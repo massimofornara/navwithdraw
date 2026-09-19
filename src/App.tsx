@@ -9,6 +9,7 @@ import AdminPanel from './AdminPanel'
 import AdminDashboard from './AdminDashboard'
 import OpenBankingPanel from './OpenBankingPanel'
 import CryptoWalletPanel from './CryptoWalletPanel'
+import ReconciliationOperational from './ReconciliationOperational'
 
 type Account = {
   id: string
@@ -518,67 +519,7 @@ function App() {
 
         {/* Reconciliation */}
         {activeTab === 'reconciliation' && (
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold">Batch di Riconciliazione</h3>
-            
-            <div className="space-y-4">
-              {batches.map((batch) => {
-                const account = accounts.find(a => a.id === batch.accountId)
-                return (
-                  <div key={batch.id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h4 className="font-semibold text-lg">{account?.name}</h4>
-                        <p className="text-sm text-slate-400">{batch.date}</p>
-                      </div>
-                      <span className={`px-3 py-1 rounded-full text-xs ${
-                        batch.status === 'completed' ? 'bg-emerald-500/20 text-emerald-300' :
-                        batch.status === 'in-progress' ? 'bg-yellow-500/20 text-yellow-300' :
-                        'bg-slate-500/20 text-slate-300'
-                      }`}>
-                        {batch.status === 'completed' ? '✓ Completato' :
-                         batch.status === 'in-progress' ? '⏳ In corso' : '⏸ In attesa'}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Estratti conto</p>
-                        <p className="text-lg font-bold">{batch.statements.length}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Transazioni matchate</p>
-                        <p className="text-lg font-bold text-emerald-400">{batch.matched}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Non matchate</p>
-                        <p className="text-lg font-bold text-yellow-400">{batch.unmatched}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Discrepanze</p>
-                        <p className={`text-lg font-bold ${batch.discrepancies === 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                          {batch.discrepancies}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-slate-700/50 pt-3">
-                      <p className="text-xs text-slate-500 mb-2">Ultimi estratti conto:</p>
-                      <div className="space-y-1">
-                        {batch.statements.map((stmt, i) => (
-                          <div key={i} className="flex justify-between text-sm">
-                            <span className="text-slate-300">{stmt.date}</span>
-                            <span className="text-slate-400">{stmt.transactions} transazioni</span>
-                            <span className="font-mono">€{stmt.balance.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+          <ReconciliationOperational />
         )}
 
         {/* Import */}
