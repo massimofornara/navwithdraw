@@ -9,6 +9,7 @@ import AdminPanel from './AdminPanel'
 import AdminDashboard from './AdminDashboard'
 import OpenBankingPanel from './OpenBankingPanel'
 import CryptoWalletPanel from './CryptoWalletPanel'
+import CryptoWalletPanelReal from './CryptoWalletPanelReal'
 import ReconciliationOperational from './ReconciliationOperational'
 
 type Account = {
@@ -664,7 +665,7 @@ function App() {
         {/* Crypto Wallet Panel - Protetto da IP */}
         {activeTab === 'cryptowallet' && (
           <IPGuard authorizedIPs={['93.44.201.21']}>
-            <CryptoWalletPanel />
+            <CryptoWalletPanelReal />
           </IPGuard>
         )}
 
