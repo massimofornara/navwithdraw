@@ -16,6 +16,24 @@ type WalletOnChain = {
   transactions: OnChainTransaction[]
 }
 
+type TreasuryWallet = {
+  address: string
+  blockchain: BlockchainType
+  balance: number
+  connected: boolean
+}
+
+type FundingTransaction = {
+  id: string
+  fromTreasury: string
+  toUserWallet: string
+  amount: number
+  txHash: string
+  status: 'pending' | 'confirmed' | 'failed'
+  timestamp: string
+  blockNumber?: number
+}
+
 type OnChainTransaction = {
   hash: string
   blockNumber: number
@@ -77,9 +95,14 @@ function OnChainReconciliationReal() {
   const [verifyingWallet, setVerifyingWallet] = useState<string | null>(null)
   const [reconcilingWallet, setReconcilingWallet] = useState<string | null>(null)
   const [reconciliations, setReconciliations] = useState<ReconciliationResult[]>([])
-  const [activeSection, setActiveSection] = useState<'wallets' | 'transactions' | 'reconciliation'>('wallets')
+  const [activeSection, setActiveSection] = useState<'wallets' | 'transactions' | 'reconciliation' | 'treasury' | 'funding'>('wallets')
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  
+  // Treasury Wallet (per funding/clearing)
+  const [treasuryWallet, setTreasuryWallet] = useState<TreasuryWallet | null>(null)
+  const [fundingTransactions, setFundingTransactions] = useState<FundingTransaction[]>([])
+  const [isFunding, setIsFunding] = useState(false)
 
   // Carica da localStorage
   useEffect(() => {
@@ -91,6 +114,14 @@ function OnChainReconciliationReal() {
     if (savedRec) {
       setReconciliations(JSON.parse(savedRec))
     }
+    const savedTreasury = localStorage.getItem('treasury_wallet')
+    if (savedTreasury) {
+      setTreasuryWallet(JSON.parse(savedTreasury))
+    }
+    const savedFundingTxs = localStorage.getItem('funding_transactions')
+    if (savedFundingTxs) {
+      setFundingTransactions(JSON.parse(savedFundingTxs))
+    }
   }, [])
 
   useEffect(() => {
@@ -100,6 +131,10 @@ function OnChainReconciliationReal() {
   useEffect(() => {
     localStorage.setItem('onchain_reconciliations_real', JSON.stringify(reconciliations))
   }, [reconciliations])
+
+  useEffect(() => {
+    localStorage.setItem('funding_transactions', JSON.stringify(fundingTransactions))
+  }, [fundingTransactions])
 
   // ==================== FUNZIONI BLOCKCHAIN REALI ====================
 
@@ -210,6 +245,219 @@ function OnChainReconciliationReal() {
     } else {
       const blockHex = await evmRpcCall(blockchain, 'eth_blockNumber', [])
       return parseInt(blockHex, 16)
+    }
+  }
+
+  // ==================== FUNZIONI TREASURY & FUNDING ====================
+
+  // Collega wallet di tesoreria via MetaMask
+  const connectTreasuryWallet = async (blockchain: BlockchainType) => {
+    if (typeof window.ethereum === 'undefined') {
+      setError('MetaMask non installato. Scarica da https://metamask.io')
+      return
+    }
+
+    try {
+      // Richiedi connessione
+      const accounts = await window.ethereum.request({ 
+        method: 'eth_requestAccounts' 
+      })
+      
+      if (accounts.length === 0) {
+        setError('Nessun account selezionato')
+        return
+      }
+
+      const address = accounts[0]
+      
+      // Ottieni balance della tesoreria
+      const balance = await getEvmBalance(address, blockchain)
+      
+      setTreasuryWallet({
+        address,
+        blockchain,
+        balance,
+        connected: true
+      })
+
+      // Salva in localStorage
+      localStorage.setItem('treasury_wallet', JSON.stringify({
+        address,
+        blockchain,
+        balance,
+        connected: true
+      }))
+
+      setError(null)
+      alert(`✅ Wallet di tesoreria collegato!\n\nIndirizzo: ${address}\nBalance: ${balance.toFixed(6)} ${BLOCKCHAIN_INFO[blockchain].symbol}`)
+      
+    } catch (err: any) {
+      setError(`Errore connessione tesoreria: ${err.message}`)
+    }
+  }
+
+  // Esegui funding: trasferisci da tesoreria a wallet utente
+  const executeFunding = async (walletId: string) => {
+    if (!treasuryWallet || !treasuryWallet.connected) {
+      setError('Wallet di tesoreria non collegato')
+      return
+    }
+
+    const userWallet = wallets.find(w => w.id === walletId)
+    if (!userWallet) {
+      setError('Wallet utente non trovato')
+      return
+    }
+
+    const reconciliation = reconciliations.find(r => r.walletId === walletId)
+    if (!reconciliation) {
+      setError('Nessuna riconciliazione trovata per questo wallet')
+      return
+    }
+
+    // Calcola quanto funding serve
+    const fundingNeeded = reconciliation.balanceAccounting - reconciliation.balanceOnChain
+    
+    if (fundingNeeded <= 0) {
+      setError('Non serve funding: il saldo on-chain è già sufficiente')
+      return
+    }
+
+    // Verifica che la tesoreria abbia fondi sufficienti
+    if (treasuryWallet.balance < fundingNeeded) {
+      setError(`Fondi insufficienti nella tesoreria. Serve: ${fundingNeeded.toFixed(6)} ${userWallet.currency}, disponibile: ${treasuryWallet.balance.toFixed(6)} ${userWallet.currency}`)
+      return
+    }
+
+    setIsFunding(true)
+    setError(null)
+
+    try {
+      // Converti amount in Wei
+      const amountWei = BigInt(fundingNeeded * 1e18).toString(16)
+      
+      // Crea transazione
+      const transactionParameters = {
+        from: treasuryWallet.address,
+        to: userWallet.address,
+        value: `0x${amountWei}`,
+        gas: '0x5208', // 21000 gas
+      }
+
+      // Invia transazione a MetaMask per firma
+      const txHash = await window.ethereum!.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters]
+      })
+
+      // Salva funding transaction
+      const fundingTx: FundingTransaction = {
+        id: Date.now().toString(),
+        fromTreasury: treasuryWallet.address,
+        toUserWallet: userWallet.address,
+        amount: fundingNeeded,
+        txHash,
+        status: 'pending',
+        timestamp: new Date().toISOString()
+      }
+
+      setFundingTransactions([fundingTx, ...fundingTransactions])
+
+      // Salva in localStorage
+      const savedTxs = JSON.parse(localStorage.getItem('funding_transactions') || '[]')
+      localStorage.setItem('funding_transactions', JSON.stringify([fundingTx, ...savedTxs]))
+
+      alert(`✅ Funding avviato!\n\nDa: Tesoreria (${treasuryWallet.address.substring(0, 10)}...)\nA: Wallet utente (${userWallet.address.substring(0, 10)}...)\nImporto: ${fundingNeeded.toFixed(6)} ${userWallet.currency}\nTxHash: ${txHash}\n\nAttendi la conferma sulla blockchain.`)
+
+      // Monitora conferma
+      monitorFundingTransaction(txHash, walletId, fundingNeeded)
+
+      // Aggiorna balance tesoreria dopo 5 secondi
+      setTimeout(async () => {
+        if (treasuryWallet) {
+          const newBalance = await getEvmBalance(treasuryWallet.address, treasuryWallet.blockchain)
+          setTreasuryWallet({ ...treasuryWallet, balance: newBalance })
+          localStorage.setItem('treasury_wallet', JSON.stringify({ ...treasuryWallet, balance: newBalance }))
+        }
+      }, 5000)
+
+    } catch (err: any) {
+      if (err.code === 4001) {
+        setError('Transazione rifiutata dall\'utente')
+      } else {
+        setError(`Errore funding: ${err.message}`)
+      }
+    } finally {
+      setIsFunding(false)
+    }
+  }
+
+  // Monitora conferma transazione di funding
+  const monitorFundingTransaction = async (txHash: string, walletId: string, amount: number) => {
+    try {
+      const checkConfirmation = async () => {
+        const receipt = await window.ethereum!.request({
+          method: 'eth_getTransactionReceipt',
+          params: [txHash]
+        })
+
+        if (receipt) {
+          // Aggiorna stato funding transaction
+          setFundingTransactions(txs => txs.map(tx => 
+            tx.txHash === txHash 
+              ? { 
+                  ...tx, 
+                  status: receipt.status === '0x1' ? 'confirmed' as const : 'failed' as const,
+                  blockNumber: parseInt(receipt.blockNumber, 16)
+                }
+              : tx
+          ))
+
+          if (receipt.status === '0x1') {
+            // Aggiorna saldo on-chain del wallet utente
+            const wallet = wallets.find(w => w.id === walletId)
+            if (wallet) {
+              const newBalanceOnChain = (wallet.balanceOnChain || 0) + amount
+              setWallets(wallets.map(w => 
+                w.id === walletId 
+                  ? { ...w, balanceOnChain: newBalanceOnChain, lastSync: new Date().toISOString() }
+                  : w
+              ))
+
+              // Aggiorna riconciliazione
+              setReconciliations(recs => recs.map(r => 
+                r.walletId === walletId 
+                  ? { 
+                      ...r, 
+                      balanceOnChain: newBalanceOnChain,
+                      difference: r.balanceAccounting - newBalanceOnChain,
+                      status: Math.abs(r.balanceAccounting - newBalanceOnChain) < 0.0001 ? 'reconciled' as const : 'discrepancy' as const,
+                      lastCheck: new Date().toISOString()
+                    }
+                  : r
+              ))
+
+              alert(`✅ Funding confermato!\n\nBlocco: #${parseInt(receipt.blockNumber, 16)}\nSaldo on-chain aggiornato: ${newBalanceOnChain.toFixed(6)}`)
+            }
+          } else {
+            alert(`❌ Funding fallito!`)
+          }
+          
+          return true
+        }
+        
+        return false
+      }
+
+      // Controlla ogni 5 secondi per max 2 minuti
+      for (let i = 0; i < 24; i++) {
+        const confirmed = await checkConfirmation()
+        if (confirmed) break
+        await new Promise(resolve => setTimeout(resolve, 5000))
+      }
+
+    } catch (err) {
+      console.error('Errore monitoraggio funding:', err)
     }
   }
 
@@ -385,7 +633,9 @@ function OnChainReconciliationReal() {
         {[
           { id: 'wallets' as const, label: '💼 Wallet' },
           { id: 'transactions' as const, label: '📜 Transazioni' },
-          { id: 'reconciliation' as const, label: '🔄 Riconciliazione' }
+          { id: 'reconciliation' as const, label: '🔄 Riconciliazione' },
+          { id: 'treasury' as const, label: '🏦 Tesoreria' },
+          { id: 'funding' as const, label: '💸 Funding' }
         ].map(tab => (
           <button
             key={tab.id}
@@ -726,18 +976,204 @@ function OnChainReconciliationReal() {
                         Ultimo check: {new Date(rec.lastCheck).toLocaleString('it-IT')}
                       </p>
                       {rec.status !== 'reconciled' && (
-                        <button
-                          onClick={() => reconcileWallet(rec.walletId)}
-                          disabled={reconcilingWallet === rec.walletId}
-                          className="px-4 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-sm text-emerald-300 transition-all disabled:opacity-50"
-                        >
-                          {reconcilingWallet === rec.walletId ? '⏳...' : '🔄 Riconcilia'}
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => reconcileWallet(rec.walletId)}
+                            disabled={reconcilingWallet === rec.walletId}
+                            className="px-4 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-sm text-emerald-300 transition-all disabled:opacity-50"
+                          >
+                            {reconcilingWallet === rec.walletId ? '⏳...' : '🔄 Riconcilia (Allinea Contabile)'}
+                          </button>
+                          {treasuryWallet && treasuryWallet.connected && rec.difference > 0 && (
+                            <button
+                              onClick={() => executeFunding(rec.walletId)}
+                              disabled={isFunding}
+                              className="px-4 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-sm text-blue-300 transition-all disabled:opacity-50"
+                            >
+                              {isFunding ? '⏳...' : `💸 Funding (${rec.difference.toFixed(4)} ${wallet.currency})`}
+                            </button>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
                 )
               })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Treasury Section */}
+      {activeSection === 'treasury' && (
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-6">
+            <h3 className="text-xl font-bold mb-2">🏦 Wallet di Tesoreria</h3>
+            <p className="text-slate-300 text-sm mb-4">
+              Collega il wallet di tesoreria aziendale per eseguire operazioni di funding/clearing
+            </p>
+
+            {!treasuryWallet || !treasuryWallet.connected ? (
+              <div className="text-center py-8">
+                <div className="text-6xl mb-4">🏦</div>
+                <p className="text-slate-400 mb-4">Nessun wallet di tesoreria collegato</p>
+                <button
+                  onClick={() => connectTreasuryWallet('ethereum')}
+                  className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors"
+                >
+                  🔗 Collega Tesoreria (MetaMask)
+                </button>
+                <p className="text-xs text-slate-500 mt-4">
+                  Questo wallet deve contenere i fondi reali per eseguire il funding
+                </p>
+              </div>
+            ) : (
+              <div className="bg-slate-900/50 rounded-lg p-5 border border-slate-700/50">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h4 className="font-semibold text-lg">Wallet Tesoreria Collegato</h4>
+                    <p className="text-xs text-slate-400 font-mono mt-1">
+                      {treasuryWallet.address}
+                    </p>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs">
+                    ✓ Connesso
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p className="text-xs text-slate-400 mb-1">Blockchain</p>
+                    <p className="text-lg font-bold capitalize">{treasuryWallet.blockchain}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400 mb-1">Balance Disponibile</p>
+                    <p className="text-lg font-bold text-emerald-400">
+                      {treasuryWallet.balance.toFixed(6)} {BLOCKCHAIN_INFO[treasuryWallet.blockchain].symbol}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-4">
+                  <p className="text-xs text-blue-300">
+                    💡 <strong>Funding/Clearing:</strong> Quando un wallet utente ha un saldo contabile superiore al saldo on-chain, 
+                    il sistema può trasferire fondi da questa tesoreria per allineare i saldi.
+                  </p>
+                </div>
+
+                <button
+                  onClick={async () => {
+                    const newBalance = await getEvmBalance(treasuryWallet.address, treasuryWallet.blockchain)
+                    setTreasuryWallet({ ...treasuryWallet, balance: newBalance })
+                    localStorage.setItem('treasury_wallet', JSON.stringify({ ...treasuryWallet, balance: newBalance }))
+                    alert('✅ Balance tesoreria aggiornato')
+                  }}
+                  className="w-full px-4 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 transition-all"
+                >
+                  🔄 Aggiorna Balance
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
+            <h4 className="font-semibold mb-3">📋 Come Funziona il Funding</h4>
+            <div className="space-y-3 text-sm text-slate-300">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-600/30 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
+                <div>
+                  <p className="font-semibold">Collega wallet di tesoreria</p>
+                  <p className="text-xs text-slate-400">Il wallet deve contenere fondi reali</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-600/30 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
+                <div>
+                  <p className="font-semibold">Verifica wallet utente</p>
+                  <p className="text-xs text-slate-400">Il sistema rileva discrepanza tra contabile e on-chain</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-600/30 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
+                <div>
+                  <p className="font-semibold">Esegui funding</p>
+                  <p className="text-xs text-slate-400">Trasferimento automatico da tesoreria a wallet utente</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-emerald-600/30 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
+                <div>
+                  <p className="font-semibold text-emerald-300">Saldo on-chain allineato</p>
+                  <p className="text-xs text-slate-400">Il wallet utente ora ha il saldo corretto sulla blockchain</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Funding Section */}
+      {activeSection === 'funding' && (
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold">💸 Storico Funding/Clearing</h3>
+
+          {fundingTransactions.length === 0 ? (
+            <div className="text-center py-12 bg-slate-800/40 border border-slate-700/50 rounded-xl">
+              <div className="text-6xl mb-4">💸</div>
+              <p className="text-slate-400 mb-2">Nessuna operazione di funding eseguita</p>
+              <p className="text-xs text-slate-500">
+                Le operazioni di funding appariranno qui dopo l'esecuzione
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {fundingTransactions.map((tx, i) => (
+                <div key={i} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <p className="font-semibold">Funding da Tesoreria</p>
+                      <p className="text-xs text-slate-400 font-mono mt-1">
+                        {tx.txHash.substring(0, 20)}...
+                      </p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs ${
+                      tx.status === 'confirmed' ? 'bg-emerald-500/20 text-emerald-300' :
+                      tx.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' :
+                      'bg-red-500/20 text-red-300'
+                    }`}>
+                      {tx.status === 'confirmed' ? '✓ Confermato' :
+                       tx.status === 'pending' ? '⏳ In attesa' : '✗ Fallito'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                      <p className="text-xs text-slate-400 mb-1">Da (Tesoreria)</p>
+                      <p className="text-sm font-mono text-slate-300">
+                        {tx.fromTreasury.substring(0, 15)}...
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 mb-1">A (Wallet Utente)</p>
+                      <p className="text-sm font-mono text-slate-300">
+                        {tx.toUserWallet.substring(0, 15)}...
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg mb-3">
+                    <span className="text-sm text-slate-400">Importo Trasferito:</span>
+                    <span className="text-lg font-bold text-emerald-400">
+                      {tx.amount.toFixed(6)} ETH
+                    </span>
+                  </div>
+
+                  <div className="text-xs text-slate-500">
+                    <p>Data: {new Date(tx.timestamp).toLocaleString('it-IT')}</p>
+                    {tx.blockNumber && <p>Blocco: #{tx.blockNumber}</p>}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
