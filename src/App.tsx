@@ -13,6 +13,7 @@ import CryptoWalletPanelReal from './CryptoWalletPanelReal'
 import ReconciliationOperational from './ReconciliationOperational'
 import OnChainReconciliationReal from './OnChainReconciliationReal'
 import AccountAbstractionReconciliation from './AccountAbstractionReconciliation'
+import ReconciliationFinalReport from './ReconciliationFinalReport'
 
 type Account = {
   id: string
@@ -65,7 +66,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'openbanking' | 'cryptowallet' | 'admin' | 'admin-dashboard' | 'guide' | 'tests'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'final-report' | 'extractor' | 'portfolio' | 'openbanking' | 'cryptowallet' | 'admin' | 'admin-dashboard' | 'guide' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -303,6 +304,7 @@ function App() {
             { id: 'import' as const, label: '📥 Importa' },
             { id: 'reports' as const, label: '📄 Report' },
             { id: 'onchain' as const, label: '🔗 On-Chain' },
+            { id: 'final-report' as const, label: '🏁 Report Finale' },
             { id: 'extractor' as const, label: '🌐 Estrattore' },
             { id: 'portfolio' as const, label: '💼 Portafoglio' },
             { id: 'openbanking' as const, label: '🏦 Open Banking' },
@@ -650,6 +652,11 @@ function App() {
         {/* On-Chain Reconciliation con Account Abstraction */}
         {activeTab === 'onchain' && (
           <AccountAbstractionReconciliation />
+        )}
+
+        {/* Report Finale di Riconciliazione */}
+        {activeTab === 'final-report' && (
+          <ReconciliationFinalReport />
         )}
 
         {/* Data Extractor */}
