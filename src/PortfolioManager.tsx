@@ -141,6 +141,24 @@ function PortfolioManager() {
     localStorage.setItem('portfolio_manual_navs', JSON.stringify(manualNAVs))
   }, [manualNAVs])
 
+  // Leggi fondi importati dall'Estrattore
+  const [importedFunds, setImportedFunds] = useState<any[]>([])
+  
+  useEffect(() => {
+    const loadImportedFunds = () => {
+      const saved = localStorage.getItem('extractor_imported_funds')
+      if (saved) {
+        setImportedFunds(JSON.parse(saved))
+      }
+    }
+    
+    loadImportedFunds()
+    
+    // Polling per aggiornamenti dall'Estrattore
+    const interval = setInterval(loadImportedFunds, 2000)
+    return () => clearInterval(interval)
+  }, [])
+
   const addSecurity = (security: Omit<Security, 'id'>) => {
     const newSecurity = {
       ...security,
@@ -335,6 +353,70 @@ function PortfolioManager() {
               </table>
             </div>
           </div>
+
+          {/* Fondi Importati dall'Estrattore */}
+          {importedFunds.length > 0 && (
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-emerald-300">🌐 Fondi Importati dall'Estrattore</h3>
+                  <p className="text-sm text-slate-400 mt-1">
+                    {importedFunds.length} fondi importati da fonti esterne (si aggiornano automaticamente)
+                  </p>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs">
+                  ✓ Sincronizzato
+                </span>
+              </div>
+
+              <div className="bg-slate-900/50 rounded-lg overflow-hidden max-h-96 overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-800/50 sticky top-0">
+                    <tr className="text-left text-xs text-slate-400">
+                      <th className="px-3 py-2">Nome</th>
+                      <th className="px-3 py-2">ISIN</th>
+                      <th className="px-3 py-2">NAV Cont.</th>
+                      <th className="px-3 py-2">NAV Merc.</th>
+                      <th className="px-3 py-2">Quote</th>
+                      <th className="px-3 py-2">Valore</th>
+                      <th className="px-3 py-2">Fonte</th>
+                      <th className="px-3 py-2">Conto</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {importedFunds.map((fund: any) => {
+                      const value = fund.navAccounting * fund.shares
+                      const diff = fund.navMarket && fund.navAccounting 
+                        ? ((fund.navMarket - fund.navAccounting) / fund.navAccounting * 100)
+                        : 0
+                      
+                      return (
+                        <tr key={fund.id} className="border-t border-slate-700/30 hover:bg-slate-800/30">
+                          <td className="px-3 py-2 font-medium">{fund.name}</td>
+                          <td className="px-3 py-2 font-mono text-xs">{fund.isin}</td>
+                          <td className="px-3 py-2">€{fund.navAccounting.toFixed(2)}</td>
+                          <td className="px-3 py-2">
+                            {fund.navMarket ? (
+                              <span className={diff >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                                €{fund.navMarket.toFixed(2)}
+                                <span className="text-xs ml-1">({diff >= 0 ? '+' : ''}{diff.toFixed(2)}%)</span>
+                              </span>
+                            ) : '-'}
+                          </td>
+                          <td className="px-3 py-2">{fund.shares}</td>
+                          <td className="px-3 py-2 font-semibold text-emerald-400">
+                            €{value.toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+                          </td>
+                          <td className="px-3 py-2 text-xs text-slate-400">{fund.source}</td>
+                          <td className="px-3 py-2 text-xs">{fund.accountName}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
