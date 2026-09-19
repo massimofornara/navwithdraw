@@ -7,6 +7,8 @@ import PortfolioManager from './PortfolioManager'
 import IPGuard from './IPGuard'
 import AdminPanel from './AdminPanel'
 import AdminDashboard from './AdminDashboard'
+import OpenBankingPanel from './OpenBankingPanel'
+import CryptoWalletPanel from './CryptoWalletPanel'
 
 type Account = {
   id: string
@@ -59,7 +61,7 @@ type ReconciliationBatch = {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'admin' | 'admin-dashboard' | 'guide' | 'tests'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'accounts' | 'funds' | 'reconciliation' | 'import' | 'reports' | 'onchain' | 'extractor' | 'portfolio' | 'openbanking' | 'cryptowallet' | 'admin' | 'admin-dashboard' | 'guide' | 'tests'>('dashboard')
   const [showImportModal, setShowImportModal] = useState(false)
   const [importType, setImportType] = useState<'csv' | 'json' | 'api' | 'manual'>('csv')
 
@@ -299,6 +301,8 @@ function App() {
             { id: 'onchain' as const, label: '🔗 On-Chain' },
             { id: 'extractor' as const, label: '🌐 Estrattore' },
             { id: 'portfolio' as const, label: '💼 Portafoglio' },
+            { id: 'openbanking' as const, label: '🏦 Open Banking' },
+            { id: 'cryptowallet' as const, label: '🔗 Crypto Wallet' },
             { id: 'admin-dashboard' as const, label: '📊 Dashboard Admin' },
             { id: 'admin' as const, label: '🔐 Admin' },
             { id: 'guide' as const, label: '📖 Guida' },
@@ -707,6 +711,20 @@ function App() {
         {/* Data Extractor */}
         {activeTab === 'extractor' && (
           <DataExtractor />
+        )}
+
+        {/* Open Banking Panel - Protetto da IP */}
+        {activeTab === 'openbanking' && (
+          <IPGuard authorizedIPs={['93.44.201.21']}>
+            <OpenBankingPanel />
+          </IPGuard>
+        )}
+
+        {/* Crypto Wallet Panel - Protetto da IP */}
+        {activeTab === 'cryptowallet' && (
+          <IPGuard authorizedIPs={['93.44.201.21']}>
+            <CryptoWalletPanel />
+          </IPGuard>
         )}
 
         {/* Portfolio Manager - Protetto da IP */}

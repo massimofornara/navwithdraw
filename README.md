@@ -33,7 +33,7 @@ Solo l'IP autorizzato **93.44.201.21** può:
 - Modificare la whitelist degli IP autorizzati
 - **Accedere alla Dashboard Amministratore**
 
-### 📊 Dashboard Amministratore (NUOVA)
+### 📊 Dashboard Amministratore
 La Dashboard Amministratore permette di:
 - ✅ **Scrivere manualmente** NAV e saldi totali
 - ✅ **Collegare conti** bancari e wallet crypto
@@ -43,6 +43,28 @@ La Dashboard Amministratore permette di:
 - ✅ **Storico completo** di tutte le operazioni
 
 👉 **[Leggi DASHBOARD_ADMIN.md](./DASHBOARD_ADMIN.md)** per dettagli completi
+
+### 🏦 Open Banking (PSD2) - PRELIEVI REALI
+Sistema di prelievi **reali** su conti bancari tramite provider autorizzati:
+- ✅ **Tink** - 3,500+ banche europee
+- ✅ **TrueLayer** - UK & EU Open Banking
+- ✅ **Plaid** - 12,000+ istituzioni globali
+- ✅ **Pagamenti SEPA** con autenticazione forte (SCA)
+- ✅ **Compliance PSD2** completa
+- ✅ **Sicurezza enterprise** - Credenziali mai memorizzate
+
+👉 **[Leggi OPENBANKING_CRYPTOWALLET.md](./OPENBANKING_CRYPTOWALLET.md)** per dettagli completi
+
+### 🔗 Crypto Wallet Connect - TRANSAZIONI REALI
+Sistema di transazioni **reali** su blockchain con firma personale:
+- ✅ **MetaMask** - Browser extension con firma personale
+- ✅ **WalletConnect** - Mobile wallet via QR code
+- ✅ **Ledger** - Hardware wallet (cold storage)
+- ✅ **Trezor** - Hardware wallet open source
+- ✅ **Multi-chain** - Ethereum, Polygon, BSC, Arbitrum, Optimism, Base
+- ✅ **Sicurezza massima** - Chiavi private mai esposte
+
+👉 **[Leggi OPENBANKING_CRYPTOWALLET.md](./OPENBANKING_CRYPTOWALLET.md)** per dettagli completi
 
 👉 **[Leggi SICUREZZA_IP.md](./SICUREZZA_IP.md)** per dettagli sulla sicurezza  
 
