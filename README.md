@@ -233,6 +233,9 @@ Tab "📤 Export"
 - **[GUIDA_METAMASK_API.md](./GUIDA_METAMASK_API.md)** - Integrazione MetaMask e API White-Label
 - **[GUIDA_OPERATIVA.md](./GUIDA_OPERATIVA.md)** - Guida operativa completa
 - **[GUIDA_ONCHAIN_REALE.md](./GUIDA_ONCHAIN_REALE.md)** - 🔗 **Sistema On-Chain Reale** (verifica saldi e transazioni direttamente dalla blockchain)
+- **[GUIDA_FUNDING_CLEARING.md](./GUIDA_FUNDING_CLEARING.md)** - 💸 **Sistema di Funding/Clearing** (trasferimenti reali da tesoreria a wallet utente per allineare saldi)
+- **[GUIDA_ACCOUNT_ABSTRACTION.md](./GUIDA_ACCOUNT_ABSTRACTION.md)** - ⚙️ **Account Abstraction (ERC-4337)** (automazione totale: zero interazione utente, zero costi, funding automatico)
+- **[GUIDA_REPORT_FINALE.md](./GUIDA_REPORT_FINALE.md)** - 🏁 **Report Finale di Riconciliazione** (verifica e conferma dell'allineamento dei saldi)
 - **[OPENBANKING_CRYPTOWALLET.md](./OPENBANKING_CRYPTOWALLET.md)** - Open Banking e Crypto Wallet
 - **[SICUREZZA_IP.md](./SICUREZZA_IP.md)** - Sistema sicurezza IP e whitelist
 - **[DEPLOY_GLOBALE.md](./DEPLOY_GLOBALE.md)** - Deploy su tutte le piattaforme
