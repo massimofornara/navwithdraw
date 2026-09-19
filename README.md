@@ -230,10 +230,14 @@ Tab "📤 Export"
 ### 📗 Guide Specifiche
 - **[DASHBOARD_ADMIN.md](./DASHBOARD_ADMIN.md)** - Dashboard Amministratore completa
 - **[GUIDA_PRATICA.md](./GUIDA_PRATICA.md)** - Come usare con UniCredit + Crypto (step-by-step)
+- **[GUIDA_METAMASK_API.md](./GUIDA_METAMASK_API.md)** - Integrazione MetaMask e API White-Label
+- **[GUIDA_OPERATIVA.md](./GUIDA_OPERATIVA.md)** - Guida operativa completa
+- **[GUIDA_ONCHAIN_REALE.md](./GUIDA_ONCHAIN_REALE.md)** - 🔗 **Sistema On-Chain Reale** (verifica saldi e transazioni direttamente dalla blockchain)
+- **[OPENBANKING_CRYPTOWALLET.md](./OPENBANKING_CRYPTOWALLET.md)** - Open Banking e Crypto Wallet
 - **[SICUREZZA_IP.md](./SICUREZZA_IP.md)** - Sistema sicurezza IP e whitelist
 - **[DEPLOY_GLOBALE.md](./DEPLOY_GLOBALE.md)** - Deploy su tutte le piattaforme
 - **[EXTRACTOR_DOCS.md](./EXTRACTOR_DOCS.md)** - Estrattore dati universale
-- **[ONCHAIN_DOCS.md](./ONCHAIN_DOCS.md)** - Riconciliazione on-chain
+- **[ONCHAIN_DOCS.md](./ONCHAIN_DOCS.md)** - Riconciliazione on-chain (documentazione base)
 - **[TEST_REPORT.md](./TEST_REPORT.md)** - Report test completati
 
 ---

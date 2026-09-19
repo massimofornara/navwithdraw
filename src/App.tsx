@@ -11,6 +11,7 @@ import OpenBankingPanel from './OpenBankingPanel'
 import CryptoWalletPanel from './CryptoWalletPanel'
 import CryptoWalletPanelReal from './CryptoWalletPanelReal'
 import ReconciliationOperational from './ReconciliationOperational'
+import OnChainReconciliationReal from './OnChainReconciliationReal'
 
 type Account = {
   id: string
@@ -647,7 +648,7 @@ function App() {
 
         {/* On-Chain Reconciliation */}
         {activeTab === 'onchain' && (
-          <OnChainReconciliationPanel />
+          <OnChainReconciliationReal />
         )}
 
         {/* Data Extractor */}
