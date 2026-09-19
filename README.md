@@ -202,11 +202,11 @@ Tab "📤 Export"
 
 ## 📖 Guide Complete
 
-### 📘 Guide Principali
-- **[GUIDA_COMPLETA_AGGIORNATA.md](./GUIDA_COMPLETA_AGGIORNATA.md)** - **GUIDA PRINCIPALE** - Tutto quello che devi sapere
-- **[DASHBOARD_ADMIN.md](./DASHBOARD_ADMIN.md)** - **NUOVA** Dashboard Amministratore completa
+### 📘 Guida Principale
+- **[GUIDA_COMPLETA_DEFINITIVA.md](./GUIDA_COMPLETA_DEFINITIVA.md)** - **GUIDA DEFINITIVA** - Completa per Amministratore e Utenti
 
 ### 📗 Guide Specifiche
+- **[DASHBOARD_ADMIN.md](./DASHBOARD_ADMIN.md)** - Dashboard Amministratore completa
 - **[GUIDA_PRATICA.md](./GUIDA_PRATICA.md)** - Come usare con UniCredit + Crypto (step-by-step)
 - **[SICUREZZA_IP.md](./SICUREZZA_IP.md)** - Sistema sicurezza IP e whitelist
 - **[DEPLOY_GLOBALE.md](./DEPLOY_GLOBALE.md)** - Deploy su tutte le piattaforme
