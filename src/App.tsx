@@ -12,6 +12,7 @@ import CryptoWalletPanel from './CryptoWalletPanel'
 import CryptoWalletPanelReal from './CryptoWalletPanelReal'
 import ReconciliationOperational from './ReconciliationOperational'
 import OnChainReconciliationReal from './OnChainReconciliationReal'
+import AccountAbstractionReconciliation from './AccountAbstractionReconciliation'
 
 type Account = {
   id: string
@@ -646,9 +647,9 @@ function App() {
           </div>
         )}
 
-        {/* On-Chain Reconciliation */}
+        {/* On-Chain Reconciliation con Account Abstraction */}
         {activeTab === 'onchain' && (
-          <OnChainReconciliationReal />
+          <AccountAbstractionReconciliation />
         )}
 
         {/* Data Extractor */}
