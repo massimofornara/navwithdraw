@@ -31,8 +31,20 @@ Solo l'IP autorizzato **93.44.201.21** può:
 - Gestire il portafoglio
 - Accedere al pannello amministratore
 - Modificare la whitelist degli IP autorizzati
+- **Accedere alla Dashboard Amministratore**
 
-👉 **[Leggi SICUREZZA_IP.md](./SICUREZZA_IP.md)** per dettagli completi  
+### 📊 Dashboard Amministratore (NUOVA)
+La Dashboard Amministratore permette di:
+- ✅ **Scrivere manualmente** NAV e saldi totali
+- ✅ **Collegare conti** bancari e wallet crypto
+- ✅ **Effettuare prelievi** tra conti collegati
+- ✅ **Gestire tutte le operazioni** della piattaforma
+- ✅ **Persistenza dati** - I dati non spariscono mai
+- ✅ **Storico completo** di tutte le operazioni
+
+👉 **[Leggi DASHBOARD_ADMIN.md](./DASHBOARD_ADMIN.md)** per dettagli completi
+
+👉 **[Leggi SICUREZZA_IP.md](./SICUREZZA_IP.md)** per dettagli sulla sicurezza  
 
 ---
 
@@ -191,9 +203,10 @@ Tab "📤 Export"
 ## 📖 Guide Complete
 
 ### 📘 Guida Principale
-- **[GUIDA_COMPLETA_AGGIORNATA.md](./GUIDA_COMPLETA_AGGIORNATA.md)** - **GUIDA PRINCIPALE** - Tutto quello che devi sapere
+- **[GUIDA_COMPLETA_DEFINITIVA.md](./GUIDA_COMPLETA_DEFINITIVA.md)** - **GUIDA DEFINITIVA** - Completa per Amministratore e Utenti
 
 ### 📗 Guide Specifiche
+- **[DASHBOARD_ADMIN.md](./DASHBOARD_ADMIN.md)** - Dashboard Amministratore completa
 - **[GUIDA_PRATICA.md](./GUIDA_PRATICA.md)** - Come usare con UniCredit + Crypto (step-by-step)
 - **[SICUREZZA_IP.md](./SICUREZZA_IP.md)** - Sistema sicurezza IP e whitelist
 - **[DEPLOY_GLOBALE.md](./DEPLOY_GLOBALE.md)** - Deploy su tutte le piattaforme
